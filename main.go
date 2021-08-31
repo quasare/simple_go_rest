@@ -34,5 +34,9 @@ func handleRequest()  {
 }
 
 func main() {
+	Articles = []Article{
+        Article{Title: "Hello", Desc: "Article Description", Content: "Article Content"},
+        Article{Title: "Hello 2", Desc: "Article Description", Content: "Article Content"},
+    }
 	handleRequest()
 }
