@@ -9,6 +9,7 @@ import (
 )
 
 type Article struct {
+	Id string `json:"Id"`
 	Title string `json:"Title"`
 	Desc string `json:"desc"`
 	Content string `json:"content"`
@@ -29,6 +30,18 @@ func homePage(w http.ResponseWriter, r *http.Request)  {
 	fmt.Fprint(w, "Homepage Endpoint Hit")
 }
 
+func returnSingleArticle(w http.ResponseWriter, r *http.Request){
+    vars := mux.Vars(r)
+    key := vars["id"]
+
+    for _, article := range Articles {
+        if article.Id == key {
+            json.NewEncoder(w).Encode(article)
+        }
+    }
+
+}
+
 func handleRequest()  {
 	http.HandleFunc("/", homePage)
 	http.HandleFunc("/articles", allArticles)
@@ -39,6 +52,7 @@ func handleRequests() {
 	myRouter:= mux.NewRouter().StrictSlash(true)
 
 	myRouter.HandleFunc("/", homePage)
+	myRouter.HandleFunc("/article/{id}", returnSingleArticle)
 	myRouter.HandleFunc("/all", allArticles )
 
 	log.Fatal(http.ListenAndServe(":8082", myRouter))
@@ -46,8 +60,8 @@ func handleRequests() {
 
 func main() {
 	Articles = []Article{
-        Article{Title: "Hello", Desc: "Article Description", Content: "Article Content"},
-        Article{Title: "Hello 2", Desc: "Article Description", Content: "Article Content"},
+        Article{Id: "1", Title: "Hello", Desc: "Article Description", Content: "Article Content"},
+        Article{Id: "2", Title: "Hello 2", Desc: "Article Description", Content: "Article Content"},
     }
 	handleRequests()
 }
