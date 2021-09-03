@@ -13,11 +13,12 @@ type Article struct {
 	Content string `json:"content"`
 }
 
-type Articles []Article
+var Articles []Article
 
 func allArticles(w http.ResponseWriter, r *http.Request){
-	articles := Articles{
+	articles := []Article{
 		Article{Title:"Test Title", Desc: "Test Description", Content: "Test Content"},
+		Article{Title:"Test Title2", Desc: "Test Description2", Content: "Test Content2"},
 	}
 	fmt.Println("Endpoint Hit: All Articels")
 	json.NewEncoder(w).Encode(articles)
