@@ -42,6 +42,13 @@ func returnSingleArticle(w http.ResponseWriter, r *http.Request){
 
 }
 
+func createNewArticle(w http.ResponseWriter, r *http.Request) {
+    // get the body of our POST request
+    // return the string response containing the request body    
+    reqBody, _ := ioutil.ReadAll(r.Body)
+    fmt.Fprintf(w, "%+v", string(reqBody))
+}
+
 func handleRequest()  {
 	http.HandleFunc("/", homePage)
 	http.HandleFunc("/articles", allArticles)
@@ -52,9 +59,11 @@ func handleRequests() {
 	myRouter:= mux.NewRouter().StrictSlash(true)
 
 	myRouter.HandleFunc("/", homePage)
-	myRouter.HandleFunc("/article/{id}", returnSingleArticle)
+	
 	myRouter.HandleFunc("/all", allArticles )
 
+	myRouter.HandleFunc("/article/{id}", returnSingleArticle)
+	myRouter.HandleFunc("/article", createNewArticle).Methods("POST")
 	log.Fatal(http.ListenAndServe(":8082", myRouter))
 }
 
